@@ -8,6 +8,10 @@ class TileMap
 public:
     /* Constructors */
     TileMap(const sf::Vector2f& position, const sf::Vector2f& mapSize, const sf::Vector2i& tileCount, int* tiles);
+    TileMap(const TileMap&) = delete;
+    
+    /* Destructor */
+    ~TileMap();
     
     /* Getters */
     sf::Vector2f getPosition() const;

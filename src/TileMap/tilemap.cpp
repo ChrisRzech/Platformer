@@ -2,7 +2,7 @@
 #include <stdexcept>
 
 TileMap::TileMap(const sf::Vector2f& position, const sf::Vector2f& mapSize, const sf::Vector2i& tileCount, int* tiles)
-    : m_pos(position), m_mapSize(mapSize), m_tileCount(tileCount), m_tiles(tiles)
+    : m_pos(position), m_mapSize(mapSize), m_tileCount(tileCount), m_tiles(nullptr)
 {
     /* NOTE:
      * We don't make TILECOUNT unsigned because tiles can't have coordinate
@@ -10,9 +10,19 @@ TileMap::TileMap(const sf::Vector2f& position, const sf::Vector2f& mapSize, cons
      * doesn't make sense, so it is checked.
      */
     if(tileCount.x <= 0 || tileCount.y <= 0)
-        throw std::invalid_argument("Tile count size can't be negative");
+        throw std::invalid_argument("Tile count can't be negative");
     
     updateTileSize();
+    
+    /* Deep copy of tile values */
+    m_tiles = new int[tileCount.x * tileCount.y]{0};
+    for(int i = 0; i < tileCount.x * tileCount.y; i++)
+        m_tiles[i] = tiles[i];
+}
+
+TileMap::~TileMap()
+{
+    delete[] m_tiles;
 }
 
 sf::Vector2f TileMap::getPosition() const
@@ -82,6 +92,7 @@ void TileMap::draw(sf::RenderWindow& window) const
     {
         for(int x = 0; x < m_tileCount.x; x++)
         {
+            //TODO: replace colors with textures
             sf::Color color;
             switch(m_tiles[x + y * m_tileCount.x])
             {
