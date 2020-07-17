@@ -20,8 +20,7 @@ int main()
         4, 0, 0, 0, 0, 0, 0, 4,
         4, 4, 4, 4, 4, 4, 4, 4,
     };
-    TileMap tilemap({0, 0}, {(float)windowSize.x, (float)windowSize.y}, tileMapSize);
-    tilemap.setTiles(tiles);
+    TileMap tilemap({0, 0}, {(float)windowSize.x, (float)windowSize.y}, tileMapSize, tiles);
     
     /* Game loop */
     while(window.isOpen())

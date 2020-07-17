@@ -7,7 +7,7 @@ class TileMap
 {
 public:
     /* Constructors */
-    TileMap(const sf::Vector2f& position, const sf::Vector2f& mapSize, const sf::Vector2i& tileCount);
+    TileMap(const sf::Vector2f& position, const sf::Vector2f& mapSize, const sf::Vector2i& tileCount, int* tiles);
     
     /* Getters */
     sf::Vector2f getPosition() const;

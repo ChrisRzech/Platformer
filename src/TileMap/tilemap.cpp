@@ -1,8 +1,8 @@
 #include "tilemap.hpp"
 #include <stdexcept>
 
-TileMap::TileMap(const sf::Vector2f& position, const sf::Vector2f& mapSize, const sf::Vector2i& tileCount)
-    : m_pos(position), m_mapSize(mapSize), m_tileCount(tileCount), m_tiles(nullptr)
+TileMap::TileMap(const sf::Vector2f& position, const sf::Vector2f& mapSize, const sf::Vector2i& tileCount, int* tiles)
+    : m_pos(position), m_mapSize(mapSize), m_tileCount(tileCount), m_tiles(tiles)
 {
     /* NOTE:
      * We don't make TILECOUNT unsigned because tiles can't have coordinate
@@ -73,6 +73,9 @@ bool TileMap::inBounds(const Tile& a) const
 
 void TileMap::draw(sf::RenderWindow& window) const
 {
+    if(m_tiles == nullptr)
+        return;
+    
     sf::RectangleShape rect(m_tileSize);
     
     for(int y = 0; y < m_tileCount.y; y++)
@@ -100,8 +103,11 @@ void TileMap::draw(sf::RenderWindow& window) const
             }
             rect.setFillColor(color);
             
-            sf::Vector2f windowPosition = tileToPixel(Tile(x, y));
-            rect.setPosition(windowPosition);
+            sf::Vector2f rectPos = tileToPixel(Tile(x, y));
+            rectPos.x += m_pos.x;
+            rectPos.y += m_pos.y;
+            rect.setPosition(rectPos);
+            
             window.draw(rect);
         }
     }
