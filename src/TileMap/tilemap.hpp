@@ -7,12 +7,12 @@ class TileMap
 {
 public:
     /* Constructors */
-    TileMap(const sf::Vector2f& position, const sf::Vector2f& mapSize, const sf::Vector2u& tileCount);
+    TileMap(const sf::Vector2f& position, const sf::Vector2f& mapSize, const sf::Vector2i& tileCount);
     
     /* Getters */
     sf::Vector2f getPosition() const;
     sf::Vector2f getMapSize() const;
-    sf::Vector2u getTileCount() const;
+    sf::Vector2i getTileCount() const;
     sf::Vector2f getTileSize() const;
     
     /* Setters */
@@ -35,7 +35,7 @@ private:
     /* Data */
     sf::Vector2f m_pos;
     sf::Vector2f m_mapSize;
-    sf::Vector2u m_tileCount;
+    sf::Vector2i m_tileCount;
     sf::Vector2f m_tileSize;
     int* m_tiles;
 };

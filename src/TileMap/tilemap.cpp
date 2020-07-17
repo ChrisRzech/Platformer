@@ -1,8 +1,17 @@
 #include "tilemap.hpp"
+#include <stdexcept>
 
-TileMap::TileMap(const sf::Vector2f& position, const sf::Vector2f& mapSize, const sf::Vector2u& tileCount)
+TileMap::TileMap(const sf::Vector2f& position, const sf::Vector2f& mapSize, const sf::Vector2i& tileCount)
     : m_pos(position), m_mapSize(mapSize), m_tileCount(tileCount), m_tiles(nullptr)
 {
+    /* NOTE:
+     * We don't make TILECOUNT unsigned because tiles can't have coordinate
+     * values above the max for INT. However, making the tile count negative
+     * doesn't make sense, so it is checked.
+     */
+    if(tileCount.x <= 0 || tileCount.y <= 0)
+        throw std::invalid_argument("Tile count size can't be negative");
+    
     updateTileSize();
 }
 
@@ -16,7 +25,7 @@ sf::Vector2f TileMap::getMapSize() const
     return m_mapSize;
 }
 
-sf::Vector2u TileMap::getTileCount() const
+sf::Vector2i TileMap::getTileCount() const
 {
     return m_tileCount;
 }
@@ -58,17 +67,17 @@ Tile TileMap::pixelToTile(const sf::Vector2f& a) const
 
 bool TileMap::inBounds(const Tile& a) const
 {
-    return a.x >= 0 && a.x < static_cast<int>(m_tileCount.x) &&
-           a.y >= 0 && a.y < static_cast<int>(m_tileCount.y);
+    return a.x >= 0 && a.x < m_tileCount.x &&
+           a.y >= 0 && a.y < m_tileCount.y;
 }
 
 void TileMap::draw(sf::RenderWindow& window) const
 {
     sf::RectangleShape rect(m_tileSize);
     
-    for(unsigned int y = 0; y < m_tileCount.y; y++)
+    for(int y = 0; y < m_tileCount.y; y++)
     {
-        for(unsigned int x = 0; x < m_tileCount.x; x++)
+        for(int x = 0; x < m_tileCount.x; x++)
         {
             sf::Color color;
             switch(m_tiles[x + y * m_tileCount.x])
