@@ -1,12 +1,27 @@
 #include <sfml/Graphics.hpp>
+#include <iostream>
+#include "TileMap/tilemap.hpp"
 
 int main()
 {
     /* Window */
-    const int WINDOW_WIDTH = 800;
-    const int WINDOW_HEIGHT = 600;
-    const sf::VideoMode WINDOW_VIDEO_MODE(WINDOW_WIDTH, WINDOW_HEIGHT);
-    sf::RenderWindow window(WINDOW_VIDEO_MODE, "Platformer", sf::Style::Default);
+    sf::Vector2u windowSize(800, 600);
+    sf::RenderWindow window(sf::VideoMode(windowSize.x, windowSize.y), "Platformer", sf::Style::Default);
+    window.setFramerateLimit(60);
+    
+    /* Tile map */
+    sf::Vector2u tileMapSize(8, 6);
+    int tiles[8 * 6] =
+    {
+        4, 4, 4, 4, 4, 4, 4, 4,
+        4, 0, 0, 0, 0, 0, 0, 4,
+        4, 0, 0, 0, 0, 0, 0, 4,
+        4, 0, 0, 0, 0, 0, 0, 4,
+        4, 0, 0, 0, 0, 0, 0, 4,
+        4, 4, 4, 4, 4, 4, 4, 4,
+    };
+    TileMap tilemap({0, 0}, {(float)windowSize.x, (float)windowSize.y}, tileMapSize);
+    tilemap.setTiles(tiles);
     
     /* Game loop */
     while(window.isOpen())
@@ -15,12 +30,20 @@ int main()
         sf::Event event;
         while(window.pollEvent(event))
         {
-            if(event.type == sf::Event::Closed)
+            switch(event.type)
+            {
+            case sf::Event::Closed:
                 window.close();
+                break;
+            
+            default:
+                break;
+            }
         }
         
         /* Drawing */
         window.clear(sf::Color::Magenta);
+        tilemap.draw(window);
         window.display();
     }
 }
