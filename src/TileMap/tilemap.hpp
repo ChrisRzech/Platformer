@@ -31,7 +31,7 @@ public:
     
     bool inBounds(const Tile&) const;
     
-    virtual void draw(sf::RenderTarget&, sf::RenderStates) const;
+    void draw(sf::RenderTarget&, sf::RenderStates) const override;
     
 private:
     /* Helpers */
