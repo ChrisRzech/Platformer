@@ -13,11 +13,11 @@ int main()
     sf::Vector2i tileMapSize(8, 6);
     int tiles[8 * 6] =
     {
-        4, 4, 4, 0, 0, 4, 4, 4,
+        4, 4, 4, 4, 4, 4, 4, 4,
         4, 0, 0, 0, 0, 0, 0, 4,
-        0, 0, 0, 0, 0, 0, 0, 4,
-        0, 0, 0, 0, 0, 0, 0, 4,
-        4, 0, 0, 0, 0, 0, 0, 4,
+        4, 0, 0, 0, 4, 0, 0, 4,
+        0, 0, 0, 4, 4, 0, 0, 0,
+        0, 0, 0, 0, 0, 4, 0, 0,
         4, 4, 4, 4, 4, 4, 4, 4,
     };
     TileMap tilemap({0, 0}, {(float)windowSize.x, (float)windowSize.y}, tileMapSize, tiles);
