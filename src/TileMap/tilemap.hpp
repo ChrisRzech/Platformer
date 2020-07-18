@@ -22,6 +22,7 @@ public:
     /* Setters */
     void setPosition(const sf::Vector2f&);
     void setMapSize(const sf::Vector2f&);
+    void setTile(int x, int y, int value);
     void setTiles(int*);
     
     /* Conversions */
@@ -35,6 +36,7 @@ public:
 private:
     /* Helpers */
     void updateTileSize();
+    int calcTileIndex(int x, int y) const;
     
     /* Data */
     sf::Vector2f m_pos;

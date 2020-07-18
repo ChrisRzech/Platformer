@@ -5,9 +5,8 @@ TileMap::TileMap(const sf::Vector2f& position, const sf::Vector2f& mapSize, cons
     : m_pos(position), m_mapSize(mapSize), m_tileCount(tileCount), m_tiles(nullptr)
 {
     /* NOTE:
-     * We don't make TILECOUNT unsigned because tiles can't have coordinate
-     * values above the max for INT. However, making the tile count negative
-     * doesn't make sense, so it is checked.
+     * Since tiles have signed integer coordinates, TILECOUNT is a signed integer vector.
+     * However, we must check if TILECOUNT's components are negative.
      */
     if(tileCount.x <= 0 || tileCount.y <= 0)
         throw std::invalid_argument("Tile count can't be negative");
@@ -56,6 +55,15 @@ void TileMap::setMapSize(const sf::Vector2f& a)
     updateTileSize();
 }
 
+void TileMap::setTile(int x, int y, int value)
+{
+    if(x < 0 || x >= m_tileCount.x ||
+       y < 0 || y >= m_tileCount.y)
+        return;
+    
+    m_tiles[calcTileIndex(x, y)] = value;
+}
+
 void TileMap::setTiles(int* a)
 {
     m_tiles = a;
@@ -94,7 +102,7 @@ void TileMap::draw(sf::RenderWindow& window) const
         {
             //TODO: replace colors with textures
             sf::Color color;
-            switch(m_tiles[x + y * m_tileCount.x])
+            switch(m_tiles[calcTileIndex(x, y)])
             {
             case 1:
                 color = sf::Color::White;
@@ -128,4 +136,9 @@ void TileMap::updateTileSize()
 {
     m_tileSize.x = m_mapSize.x / m_tileCount.x;
     m_tileSize.y = m_mapSize.y / m_tileCount.y;
+}
+
+int TileMap::calcTileIndex(int x, int y) const
+{
+    return x + y * m_tileCount.x;
 }
