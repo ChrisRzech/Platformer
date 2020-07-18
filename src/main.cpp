@@ -42,7 +42,7 @@ int main()
         
         /* Drawing */
         window.clear(sf::Color::Magenta);
-        tilemap.draw(window);
+        window.draw(tilemap);
         window.display();
     }
 }

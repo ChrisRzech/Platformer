@@ -89,7 +89,7 @@ bool TileMap::inBounds(const Tile& a) const
            a.y >= 0 && a.y < m_tileCount.y;
 }
 
-void TileMap::draw(sf::RenderWindow& window) const
+void TileMap::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
     if(m_tiles == nullptr)
         return;
@@ -127,7 +127,7 @@ void TileMap::draw(sf::RenderWindow& window) const
             rectPos.y += m_pos.y;
             rect.setPosition(rectPos);
             
-            window.draw(rect);
+            target.draw(rect, states);
         }
     }
 }

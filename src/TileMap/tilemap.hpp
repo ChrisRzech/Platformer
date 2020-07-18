@@ -3,7 +3,7 @@
 #include <sfml/System.hpp>
 #include <sfml/Graphics.hpp>
 
-class TileMap
+class TileMap : public sf::Drawable
 {
 public:
     /* Constructors */
@@ -31,7 +31,7 @@ public:
     
     bool inBounds(const Tile&) const;
     
-    void draw(sf::RenderWindow&) const;
+    virtual void draw(sf::RenderTarget&, sf::RenderStates) const;
     
 private:
     /* Helpers */
