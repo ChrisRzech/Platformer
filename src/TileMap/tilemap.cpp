@@ -13,10 +13,7 @@ TileMap::TileMap(const sf::Vector2f& position, const sf::Vector2f& mapSize, cons
     
     updateTileSize();
     
-    /* Deep copy of tile values */
-    m_tiles = new int[tileCount.x * tileCount.y]{0};
-    for(int i = 0; i < tileCount.x * tileCount.y; i++)
-        m_tiles[i] = tiles[i];
+    setTiles(tiles);
 }
 
 TileMap::~TileMap()
@@ -64,9 +61,14 @@ void TileMap::setTile(int x, int y, int value)
     m_tiles[calcTileIndex(x, y)] = value;
 }
 
-void TileMap::setTiles(int* a)
+void TileMap::setTiles(int* tiles)
 {
-    m_tiles = a;
+    delete[] m_tiles;
+    
+    /* Deep copy of tile values */
+    m_tiles = new int[m_tileCount.x * m_tileCount.y]{0};
+    for(int i = 0; i < m_tileCount.x * m_tileCount.y; i++)
+        m_tiles[i] = tiles[i];
 }
 
 sf::Vector2f TileMap::tileToPixel(const Tile& a) const
