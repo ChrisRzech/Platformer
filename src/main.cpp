@@ -10,17 +10,22 @@ int main()
     window.setFramerateLimit(60);
     
     /* Tile map */
-    sf::Vector2i tileMapSize(8, 6);
-    int tiles[8 * 6] =
+    const sf::Vector2f TILE_MAP_POS(0, 0);
+    const sf::Vector2f TILE_MAP_SIZE((float)windowSize.x, (float)windowSize.y);
+    const sf::Vector2i TILE_MAP_COUNT(12, 9);
+    int tiles[TILE_MAP_COUNT.x * TILE_MAP_COUNT.y] =
     {
-        4, 4, 4, 4, 4, 4, 4, 4,
-        4, 0, 0, 0, 0, 0, 0, 4,
-        4, 0, 0, 0, 4, 0, 0, 4,
-        0, 0, 0, 4, 4, 0, 0, 0,
-        0, 0, 0, 0, 0, 4, 0, 0,
-        4, 4, 4, 4, 4, 4, 4, 4,
+        4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
+        4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4,
+        4, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 4,
+        0, 0, 0, 4, 4, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 4, 4, 4, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
     };
-    TileMap tilemap({0, 0}, {(float)windowSize.x, (float)windowSize.y}, tileMapSize, tiles);
+    TileMap tilemap(TILE_MAP_POS, TILE_MAP_SIZE, TILE_MAP_COUNT, tiles);
     
     /* Game loop */
     while(window.isOpen())
