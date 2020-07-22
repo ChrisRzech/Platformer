@@ -2,12 +2,44 @@
 #include <iostream>
 #include "TileMap/tilemap.hpp"
 
+sf::View getLetterboxView(sf::View view, int windowWidth, int windowHeight)
+{
+    //Based off of: https://github.com/SFML/SFML/wiki/Source%3A-Letterbox-effect-using-a-view
+    float windowRatio = static_cast<float>(windowWidth) / windowHeight;
+    float viewRatio = static_cast<float>(view.getSize().x) / view.getSize().y;
+    float sizeX = 1;
+    float sizeY = 1;
+    float posX = 0;
+    float posY = 0;
+    
+    /* Check if horizontal spacing */
+    if(windowRatio >= viewRatio)
+    {
+        sizeX = viewRatio / windowRatio;
+        posX = (1 - sizeX) / 2.f;
+    }
+    else
+    {
+        sizeY = windowRatio / viewRatio;
+        posY = (1 - sizeY) / 2.f;
+    }
+    
+    view.setViewport(sf::FloatRect(posX, posY, sizeX, sizeY));
+    return view;
+}
+
 int main()
 {
     /* Window */
     sf::Vector2u windowSize(800, 600);
     sf::RenderWindow window(sf::VideoMode(windowSize.x, windowSize.y), "Platformer", sf::Style::Default);
     window.setFramerateLimit(60);
+    
+    /* View */
+    sf::View view;
+    view.setSize(windowSize.x, windowSize.y);
+    view.setCenter(view.getSize().x / 2, view.getSize().y / 2);
+    view = getLetterboxView(view, windowSize.x, windowSize.y);
     
     /* Tile map */
     const sf::Vector2f TILE_MAP_POS(0, 0);
@@ -39,6 +71,10 @@ int main()
             case sf::Event::Closed:
                 window.close();
                 break;
+                
+            case sf::Event::Resized:
+                view = getLetterboxView(view, event.size.width, event.size.height);
+                break;
             
             default:
                 break;
@@ -46,7 +82,8 @@ int main()
         }
         
         /* Drawing */
-        window.clear(sf::Color::Magenta);
+        window.clear(sf::Color::Black);
+        window.setView(view);
         window.draw(tilemap);
         window.display();
     }
