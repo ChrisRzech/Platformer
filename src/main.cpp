@@ -1,6 +1,7 @@
 #include <sfml/Graphics.hpp>
 #include <iostream>
 #include "TileMap/tilemap.hpp"
+#include "Entity/entity.hpp"
 
 sf::View getLetterboxView(sf::View view, int windowWidth, int windowHeight)
 {
@@ -59,6 +60,9 @@ int main()
     };
     TileMap tilemap(TILE_MAP_POS, TILE_MAP_SIZE, TILE_MAP_COUNT, tile_values);
     
+    /* Entities */
+    Entity entity({100, 100}, 10, {10, 10}, 2);
+    
     /* Game loop */
     while(window.isOpen())
     {
@@ -85,6 +89,7 @@ int main()
         window.clear(sf::Color::Black);
         window.setView(view);
         window.draw(tilemap);
+        window.draw(entity);
         window.display();
     }
 }
