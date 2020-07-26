@@ -11,6 +11,7 @@ public:
     sf::Vector2f getPosition() const;
     float getMaxVelocity() const;
     sf::FloatRect getHitbox() const;
+    sf::Vector2f getHitboxSize() const;
     int getTextureIndex() const;
     
     /* Setters */
@@ -23,6 +24,10 @@ public:
     void draw(sf::RenderTarget&, sf::RenderStates) const override;
     
 private:
+    /* Helpers */
+    void updateHitboxPos();
+    void updateSpritePos();
+    
     /* Data */
     sf::Vector2f m_pos;
     float m_maxVel;

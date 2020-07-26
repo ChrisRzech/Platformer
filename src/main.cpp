@@ -61,7 +61,7 @@ int main()
     TileMap tilemap(TILE_MAP_POS, TILE_MAP_SIZE, TILE_MAP_COUNT, tile_values);
     
     /* Entities */
-    Entity entity({100, 100}, 10, {10, 10}, 2);
+    Entity entity({100, 150}, 10, {50, 50}, 2);
     
     /* Game loop */
     while(window.isOpen())
@@ -84,6 +84,23 @@ int main()
                 break;
             }
         }
+        
+        sf::Vector2f dir(0, 0);
+        
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+            dir.y += -1;
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+            dir.y += 1;
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+            dir.x += -1;
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+            dir.x += 1;
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
+            entity.setHitboxSize(entity.getHitboxSize() * 1.01f);
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::E))
+            entity.setHitboxSize(entity.getHitboxSize() * 0.99f);
+        
+        entity.move(dir, 5);
         
         /* Drawing */
         window.clear(sf::Color::Black);
