@@ -50,10 +50,7 @@ void Entity::setPosition(const sf::Vector2f& newPos)
 
 void Entity::setMaxVelocity(float a)
 {
-    if(a < 0)
-        a = 0;
-    
-    m_maxVel = a;
+    m_maxVel = (a < 0 : 0 : a);
 }
 
 void Entity::setHitboxSize(const sf::Vector2f& a)
