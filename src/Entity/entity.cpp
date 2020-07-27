@@ -50,7 +50,7 @@ void Entity::setPosition(const sf::Vector2f& newPos)
 
 void Entity::setMaxVelocity(float a)
 {
-    m_maxVel = (a < 0 : 0 : a);
+    m_maxVel = (a < 0 ? 0 : a);
 }
 
 void Entity::setHitboxSize(const sf::Vector2f& a)
@@ -92,9 +92,9 @@ void Entity::setTextureIndex(int a)
     m_sprite.setSize({40, 40});
 }
 
-void Entity::move(const sf::Vector2f& direction, float velocity)
+void Entity::move(const sf::Vector2f& direction, float vel)
 {
-    if(velocity < 0)
+    if(vel < 0)
         return;
     
     /* Magnitude of vector */
@@ -102,8 +102,10 @@ void Entity::move(const sf::Vector2f& direction, float velocity)
     if(mag == 0)
         return;
     
-    //Normalize vector and stretch by velocity before moving position by vector
-    setPosition(m_pos + velocity * (direction / mag));
+    /* Normalize vector and stretch by velocity before moving position by vector.
+     * Cap the velocity by the maximum velocity.
+     */
+    setPosition(m_pos + (vel < m_maxVel ? vel : m_maxVel) * (direction / mag));
 }
 
 void Entity::draw(sf::RenderTarget& target, sf::RenderStates states) const
