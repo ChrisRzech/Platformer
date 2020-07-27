@@ -99,6 +99,8 @@ int main()
             entity.setHitboxSize(entity.getHitboxSize() * 1.01f);
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::E))
             entity.setHitboxSize(entity.getHitboxSize() * 0.99f);
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+            entity.debug = !entity.debug;
         
         entity.move(dir, 5);
         

@@ -23,6 +23,9 @@ public:
     void move(const sf::Vector2f& direction, float velocity);
     void draw(sf::RenderTarget&, sf::RenderStates) const override;
     
+    /* Public data */
+    bool debug;
+    
 private:
     /* Helpers */
     void updateHitboxPos();
