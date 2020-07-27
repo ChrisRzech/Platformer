@@ -1,6 +1,7 @@
 #include <sfml/Graphics.hpp>
 #include <iostream>
 #include "TileMap/tilemap.hpp"
+#include "Entity/entity.hpp"
 
 sf::View getLetterboxView(sf::View view, int windowWidth, int windowHeight)
 {
@@ -59,6 +60,9 @@ int main()
     };
     TileMap tilemap(TILE_MAP_POS, TILE_MAP_SIZE, TILE_MAP_COUNT, tile_values);
     
+    /* Entities */
+    Entity entity({100, 150}, 10, {50, 50}, 2);
+    
     /* Game loop */
     while(window.isOpen())
     {
@@ -81,10 +85,30 @@ int main()
             }
         }
         
+        sf::Vector2f dir(0, 0);
+        
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+            dir.y += -1;
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+            dir.y += 1;
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+            dir.x += -1;
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+            dir.x += 1;
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
+            entity.setHitboxSize(entity.getHitboxSize() * 1.01f);
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::E))
+            entity.setHitboxSize(entity.getHitboxSize() * 0.99f);
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+            entity.debug = !entity.debug;
+        
+        entity.move(dir, 5);
+        
         /* Drawing */
         window.clear(sf::Color::Black);
         window.setView(view);
         window.draw(tilemap);
+        window.draw(entity);
         window.display();
     }
 }
