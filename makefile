@@ -14,6 +14,7 @@ EXEC = $(BIN_DIR)/$(PROJECT_NAME)
 SRCS = $(wildcard $(SRC_DIR)/*.cpp) \
 	   $(wildcard $(SRC_DIR)/TileMap/*.cpp) \
 	   $(wildcard $(SRC_DIR)/Entity/*.cpp) \
+	   $(wildcard $(SRC_DIR)/Input/*.cpp) \
 # TODO add object file variable and rules
 # to allow rebuilding updated files only
 

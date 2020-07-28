@@ -2,6 +2,7 @@
 #include <iostream>
 #include "TileMap/tilemap.hpp"
 #include "Entity/entity.hpp"
+#include "Input/input.hpp"
 
 sf::View getLetterboxView(sf::View view, int windowWidth, int windowHeight)
 {
@@ -63,6 +64,9 @@ int main()
     /* Entities */
     Entity entity({100, 150}, 10, {50, 50}, 2);
     
+    /* Input */
+    Input input(window);
+    
     /* Game loop */
     while(window.isOpen())
     {
@@ -85,22 +89,30 @@ int main()
             }
         }
         
+        /* Input */
+        input.poll({sf::Keyboard::W, sf::Keyboard::A, sf::Keyboard::S, sf::Keyboard::D,
+                    sf::Keyboard::Q, sf::Keyboard::E, sf::Keyboard::Space}, {sf::Mouse::Left});
+        
+        /* Game logic */
         sf::Vector2f dir(0, 0);
         
-        if(sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+        if(input.keyIsPressed(sf::Keyboard::W))
             dir.y += -1;
-        if(sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+        if(input.keyIsPressed(sf::Keyboard::S))
             dir.y += 1;
-        if(sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+        if(input.keyIsPressed(sf::Keyboard::A))
             dir.x += -1;
-        if(sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+        if(input.keyIsPressed(sf::Keyboard::D))
             dir.x += 1;
-        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
+        if(input.keyIsPressed(sf::Keyboard::Q))
             entity.setHitboxSize(entity.getHitboxSize() * 1.01f);
-        if(sf::Keyboard::isKeyPressed(sf::Keyboard::E))
+        if(input.keyIsPressed(sf::Keyboard::E))
             entity.setHitboxSize(entity.getHitboxSize() * 0.99f);
-        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+        if(input.keyIsPressed(sf::Keyboard::Space))
             entity.debug = !entity.debug;
+        
+        if(input.mouseIsPressed(sf::Mouse::Left))
+            std::cout << input.mousePosition().x << ", " << input.mousePosition().y << std::endl;
         
         entity.move(dir, 5);
         
