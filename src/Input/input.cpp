@@ -1,15 +1,43 @@
 #include "input.hpp"
 
-Input::Input(const sf::Window& window, const std::vector<Key>& keysToPoll)
+Input::Input(const sf::Window& window, int holdThreshold, const std::vector<Key>& keysToPoll)
     : m_window(window), m_keysToPoll(keysToPoll)
 {
+    setHoldThreshold(holdThreshold);
+    
     m_pressed.resize(static_cast<int>(TotalKeyCount));
     m_released.resize(static_cast<int>(TotalKeyCount));
+    m_heldLoops.resize(static_cast<int>(TotalKeyCount));
 }
 
-void Input::setKeysToPoll(const std::vector<Key>& keysToPoll)
+bool Input::isPressed(Key a) const
 {
-    m_keysToPoll = keysToPoll;
+    return m_pressed[static_cast<int>(a)];
+}
+
+bool Input::wasReleased(Key a) const
+{
+    return m_released[static_cast<int>(a)];
+}
+
+bool Input::isHeld(Key a) const
+{
+    return m_heldLoops[static_cast<int>(a)] == m_holdThreshold;
+}
+
+sf::Vector2i Input::mousePosition() const
+{
+    return m_mousePos;
+}
+
+void Input::setKeysToPoll(const std::vector<Key>& a)
+{
+    m_keysToPoll = a;
+}
+
+void Input::setHoldThreshold(int a)
+{
+    m_holdThreshold = (a < MIN_HOLD_THRESHOLD ? MIN_HOLD_THRESHOLD : a);
 }
 
 void Input::poll()
@@ -39,23 +67,25 @@ void Input::poll()
         
         /* Check if the key was released after polling */
         bool isPressed = m_pressed[index];
-        m_released[index] = wasPressed && !isPressed;
+        bool wasReleased = wasPressed && !isPressed;
+        m_released[index] = wasReleased;
+        
+        /* Handle key holding */
+        if(wasReleased)
+        {
+            m_heldLoops[index] = 0;
+        }
+        else if(isPressed)
+        {
+            m_heldLoops[index]++;
+            
+            /* Cap out at the threshold */
+            if(m_heldLoops[index] > m_holdThreshold)
+                m_heldLoops[index] = m_holdThreshold;
+            
+            
+        }
     }
     
     m_mousePos = sf::Mouse::getPosition(m_window);
-}
-
-bool Input::isPressed(Key a) const
-{
-    return m_pressed[a];
-}
-
-bool Input::wasReleased(Key a) const
-{
-    return m_released[a];
-}
-
-sf::Vector2i Input::mousePosition() const
-{
-    return m_mousePos;
 }

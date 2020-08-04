@@ -41,20 +41,30 @@ public:
         
         TotalKeyCount
     };
+    
+    static const int MIN_HOLD_THRESHOLD = 2;
 
     /* Constructors */
-    Input(const sf::Window&, const std::vector<Key>& keysToPoll);
+    Input(const sf::Window&, int holdThreshold, const std::vector<Key>& keysToPoll);
     
-    void setKeysToPoll(const std::vector<Key>&);
-    void poll();
+    /* Getters */
     bool isPressed(Key) const;
     bool wasReleased(Key) const;
+    bool isHeld(Key) const;
     sf::Vector2i mousePosition() const;
+    
+    /* Setters */
+    void setKeysToPoll(const std::vector<Key>&);
+    void setHoldThreshold(int);
+    
+    void poll();
     
 private:
     const sf::Window& m_window;
     std::vector<Key> m_keysToPoll;
     std::vector<bool> m_pressed;
     std::vector<bool> m_released;
+    std::vector<int> m_heldLoops;
+    int m_holdThreshold;
     sf::Vector2i m_mousePos;
 };

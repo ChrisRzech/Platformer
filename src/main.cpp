@@ -65,8 +65,11 @@ int main()
     Entity entity({100, 150}, 10, {50, 50}, 2);
     
     /* Input */
-    Input input(window, {Input::Key::W, Input::Key::S, Input::Key::A, Input::Key::D,
-                         Input::Key::Q, Input::Key::E, Input::Key::Space, Input::Key::LeftClick});
+    const int HOLD_THRESHOLD = 15;
+    Input input(window, HOLD_THRESHOLD,
+                {Input::Key::W, Input::Key::S, Input::Key::A, Input::Key::D,
+                 Input::Key::Q, Input::Key::E, Input::Key::Space, Input::Key::Num1,
+                 Input::Key::Num2, Input::Key::LeftClick});
     
     /* Game loop */
     while(window.isOpen())
@@ -110,6 +113,10 @@ int main()
             entity.setHitboxSize(entity.getHitboxSize() * 0.99f);
         if(input.wasReleased(Input::Key::Space))
             entity.debug = !entity.debug;
+        if(input.isHeld(Input::Key::Num1))
+            entity.debug = true;
+        if(input.isHeld(Input::Key::Num2))
+            entity.debug = false;
         
         if(input.isPressed(Input::Key::LeftClick))
             std::cout << input.mousePosition().x << ", " << input.mousePosition().y << std::endl;
