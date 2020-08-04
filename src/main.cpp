@@ -65,7 +65,8 @@ int main()
     Entity entity({100, 150}, 10, {50, 50}, 2);
     
     /* Input */
-    Input input(window);
+    Input input(window, {Input::Key::W, Input::Key::S, Input::Key::A, Input::Key::D,
+                         Input::Key::Q, Input::Key::E, Input::Key::Space, Input::Key::LeftClick});
     
     /* Game loop */
     while(window.isOpen())
@@ -90,8 +91,7 @@ int main()
         }
         
         /* Input */
-        input.poll({Input::Key::W, Input::Key::S, Input::Key::A, Input::Key::D, Input::Key::Q,
-                    Input::Key::E, Input::Key::Space, Input::Key::LeftClick});
+        input.poll();
         
         /* Game logic */
         sf::Vector2f dir(0, 0);

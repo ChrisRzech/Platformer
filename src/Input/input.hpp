@@ -43,14 +43,16 @@ public:
     };
 
     /* Constructors */
-    Input(const sf::Window&);
-   
-    void poll(const std::vector<Key>& keysToCheck);
+    Input(const sf::Window&, const std::vector<Key>& keysToPoll);
+    
+    void setKeysToPoll(const std::vector<Key>&);
+    void poll();
     bool keyIsPressed(Key) const;
     sf::Vector2i mousePosition() const;
     
 private:
     const sf::Window& m_window;
+    std::vector<Key> m_keysToPoll;
     std::vector<bool> m_pressed;
     sf::Vector2i m_mousePos;
 };

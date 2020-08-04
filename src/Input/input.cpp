@@ -1,15 +1,19 @@
 #include "input.hpp"
 
-Input::Input(const sf::Window& window)
-    : m_window(window)
+Input::Input(const sf::Window& window, const std::vector<Key>& keysToPoll)
+    : m_window(window), m_keysToPoll(keysToPoll)
 {
-    //Hold an extra one just incase TotalKeyCount's index is accessed
-    m_pressed.resize(static_cast<int>(TotalKeyCount + 1));
+    m_pressed.resize(static_cast<int>(TotalKeyCount));
 }
 
-void Input::poll(const std::vector<Key>& keysToCheck)
+void Input::setKeysToPoll(const std::vector<Key>& keysToPoll)
 {
-    for(Key key : keysToCheck)
+    m_keysToPoll = keysToPoll;
+}
+
+void Input::poll()
+{
+    for(Key key : m_keysToPoll)
     {
         /* Skip over invalid values */
         if(key < 0 || key == KeyboardKeyCount || key >= TotalKeyCount)
