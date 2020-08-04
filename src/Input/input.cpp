@@ -3,30 +3,41 @@
 Input::Input(const sf::Window& window)
     : m_window(window)
 {
-    m_keyboardKeys.resize(static_cast<int>(sf::Keyboard::KeyCount));
-    m_mouseButtons.resize(static_cast<int>(sf::Mouse::ButtonCount));
+    //Hold an extra one just incase TotalKeyCount's index is accessed
+    m_pressed.resize(static_cast<int>(TotalKeyCount + 1));
 }
 
-void Input::poll(const std::vector<sf::Keyboard::Key>& keysToCheck,
-                 const std::vector<sf::Mouse::Button>& buttonsToCheck)
+void Input::poll(const std::vector<Key>& keysToCheck)
 {
-    for(sf::Keyboard::Key key : keysToCheck)
-        m_keyboardKeys[static_cast<int>(key)] = sf::Keyboard::isKeyPressed(key);
-    
-    for(sf::Mouse::Button button : buttonsToCheck)
-        m_mouseButtons[static_cast<int>(button)] = sf::Mouse::isButtonPressed(button);
+    for(Key key : keysToCheck)
+    {
+        /* Skip over invalid values */
+        if(key < 0 || key == KeyboardKeyCount || key >= TotalKeyCount)
+            continue;
+        
+        int index = static_cast<int>(key);
+        
+        /* Check if key is a keyboard or mouse key */
+        if(key < KeyboardKeyCount)
+        {
+            m_pressed[index] = sf::Keyboard::isKeyPressed(static_cast<sf::Keyboard::Key>(key));
+        }
+        else
+        {
+            /* Input::Key has the mouse buttons at the end of the enum.
+             * Therefore, convert the Input::Key value to sf::Mouse::Button.
+             */
+            sf::Mouse::Button converted = static_cast<sf::Mouse::Button>(index - static_cast<int>(KeyboardKeyCount) - 1);
+            m_pressed[index] = sf::Mouse::isButtonPressed(static_cast<sf::Mouse::Button>(converted));
+        }
+    }
     
     m_mousePos = sf::Mouse::getPosition(m_window);
 }
 
-bool Input::keyIsPressed(sf::Keyboard::Key a) const
+bool Input::keyIsPressed(Key a) const
 {
-    return m_keyboardKeys[a];
-}
-
-bool Input::mouseIsPressed(sf::Mouse::Button a) const
-{
-    return m_mouseButtons[a];
+    return m_pressed[a];
 }
 
 sf::Vector2i Input::mousePosition() const

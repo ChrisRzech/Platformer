@@ -90,28 +90,28 @@ int main()
         }
         
         /* Input */
-        input.poll({sf::Keyboard::W, sf::Keyboard::A, sf::Keyboard::S, sf::Keyboard::D,
-                    sf::Keyboard::Q, sf::Keyboard::E, sf::Keyboard::Space}, {sf::Mouse::Left});
+        input.poll({Input::Key::W, Input::Key::S, Input::Key::A, Input::Key::D, Input::Key::Q,
+                    Input::Key::E, Input::Key::Space, Input::Key::LeftClick});
         
         /* Game logic */
         sf::Vector2f dir(0, 0);
         
-        if(input.keyIsPressed(sf::Keyboard::W))
+        if(input.keyIsPressed(Input::Key::W))
             dir.y += -1;
-        if(input.keyIsPressed(sf::Keyboard::S))
+        if(input.keyIsPressed(Input::Key::S))
             dir.y += 1;
-        if(input.keyIsPressed(sf::Keyboard::A))
+        if(input.keyIsPressed(Input::Key::A))
             dir.x += -1;
-        if(input.keyIsPressed(sf::Keyboard::D))
+        if(input.keyIsPressed(Input::Key::D))
             dir.x += 1;
-        if(input.keyIsPressed(sf::Keyboard::Q))
+        if(input.keyIsPressed(Input::Key::Q))
             entity.setHitboxSize(entity.getHitboxSize() * 1.01f);
-        if(input.keyIsPressed(sf::Keyboard::E))
+        if(input.keyIsPressed(Input::Key::E))
             entity.setHitboxSize(entity.getHitboxSize() * 0.99f);
-        if(input.keyIsPressed(sf::Keyboard::Space))
+        if(input.keyIsPressed(Input::Key::Space))
             entity.debug = !entity.debug;
         
-        if(input.mouseIsPressed(sf::Mouse::Left))
+        if(input.keyIsPressed(Input::Key::LeftClick))
             std::cout << input.mousePosition().x << ", " << input.mousePosition().y << std::endl;
         
         entity.move(dir, 5);
