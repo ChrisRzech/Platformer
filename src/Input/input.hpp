@@ -51,6 +51,7 @@ public:
     bool isPressed(Key) const;
     bool wasReleased(Key) const;
     bool isHeld(Key) const;
+    int getHoldThreshold() const;
     sf::Vector2i mousePosition() const;
     
     /* Setters */

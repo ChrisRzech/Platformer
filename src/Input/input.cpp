@@ -23,6 +23,11 @@ bool Input::isHeld(Key a) const
     return getKeyInfo(a).heldTime == m_holdThreshold;
 }
 
+int Input::getHoldThreshold() const
+{
+    return m_holdThreshold;
+}
+
 sf::Vector2i Input::mousePosition() const
 {
     return m_mousePos;
