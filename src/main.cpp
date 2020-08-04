@@ -2,6 +2,7 @@
 #include <iostream>
 #include "TileMap/tilemap.hpp"
 #include "Entity/entity.hpp"
+#include "Input/input.hpp"
 
 sf::View getLetterboxView(sf::View view, int windowWidth, int windowHeight)
 {
@@ -63,6 +64,13 @@ int main()
     /* Entities */
     Entity entity({100, 150}, 10, {50, 50}, 2);
     
+    /* Input */
+    const int HOLD_THRESHOLD = 15;
+    Input input(window, HOLD_THRESHOLD,
+                {Input::Key::W, Input::Key::S, Input::Key::A, Input::Key::D,
+                 Input::Key::Q, Input::Key::E, Input::Key::Space, Input::Key::Num1,
+                 Input::Key::Num2, Input::Key::LeftClick});
+    
     /* Game loop */
     while(window.isOpen())
     {
@@ -85,22 +93,33 @@ int main()
             }
         }
         
+        /* Input */
+        input.poll();
+        
+        /* Game logic */
         sf::Vector2f dir(0, 0);
         
-        if(sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+        if(input.isPressed(Input::Key::W))
             dir.y += -1;
-        if(sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+        if(input.isPressed(Input::Key::S))
             dir.y += 1;
-        if(sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+        if(input.isPressed(Input::Key::A))
             dir.x += -1;
-        if(sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+        if(input.isPressed(Input::Key::D))
             dir.x += 1;
-        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
+        if(input.isPressed(Input::Key::Q))
             entity.setHitboxSize(entity.getHitboxSize() * 1.01f);
-        if(sf::Keyboard::isKeyPressed(sf::Keyboard::E))
+        if(input.isPressed(Input::Key::E))
             entity.setHitboxSize(entity.getHitboxSize() * 0.99f);
-        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+        if(input.wasReleased(Input::Key::Space))
             entity.debug = !entity.debug;
+        if(input.isHeld(Input::Key::Num1))
+            entity.debug = true;
+        if(input.isHeld(Input::Key::Num2))
+            entity.debug = false;
+        
+        if(input.isPressed(Input::Key::LeftClick))
+            std::cout << input.mousePosition().x << ", " << input.mousePosition().y << std::endl;
         
         entity.move(dir, 5);
         
