@@ -5,24 +5,22 @@ Input::Input(const sf::Window& window, int holdThreshold, const std::vector<Key>
 {
     setHoldThreshold(holdThreshold);
     
-    m_pressed.resize(static_cast<int>(TotalKeyCount));
-    m_released.resize(static_cast<int>(TotalKeyCount));
-    m_heldLoops.resize(static_cast<int>(TotalKeyCount));
+    m_keyInfo.resize(static_cast<int>(TotalKeyCount));
 }
 
 bool Input::isPressed(Key a) const
 {
-    return m_pressed[static_cast<int>(a)];
+    return getKeyInfo(a).isPressed;
 }
 
 bool Input::wasReleased(Key a) const
 {
-    return m_released[static_cast<int>(a)];
+    return getKeyInfo(a).wasReleased;
 }
 
 bool Input::isHeld(Key a) const
 {
-    return m_heldLoops[static_cast<int>(a)] == m_holdThreshold;
+    return getKeyInfo(a).heldTime == m_holdThreshold;
 }
 
 sf::Vector2i Input::mousePosition() const
@@ -49,12 +47,12 @@ void Input::poll()
             continue;
         
         int index = static_cast<int>(key);
-        bool wasPressed = m_pressed[index];
+        bool wasPressed = getKeyInfo(key).isPressed;
         
         /* Check if key is a keyboard or mouse key */
         if(key < KeyboardKeyCount)
         {
-            m_pressed[index] = sf::Keyboard::isKeyPressed(static_cast<sf::Keyboard::Key>(key));
+            getKeyInfo(key).isPressed = sf::Keyboard::isKeyPressed(static_cast<sf::Keyboard::Key>(key));
         }
         else
         {
@@ -62,30 +60,40 @@ void Input::poll()
              * Therefore, convert the Input::Key value to sf::Mouse::Button.
              */
             sf::Mouse::Button converted = static_cast<sf::Mouse::Button>(index - static_cast<int>(KeyboardKeyCount) - 1);
-            m_pressed[index] = sf::Mouse::isButtonPressed(static_cast<sf::Mouse::Button>(converted));
+            getKeyInfo(key).isPressed = sf::Mouse::isButtonPressed(static_cast<sf::Mouse::Button>(converted));
         }
         
         /* Check if the key was released after polling */
-        bool isPressed = m_pressed[index];
+        bool isPressed = getKeyInfo(key).isPressed;
         bool wasReleased = wasPressed && !isPressed;
-        m_released[index] = wasReleased;
+        getKeyInfo(key).wasReleased = wasReleased;
         
         /* Handle key holding */
         if(wasReleased)
         {
-            m_heldLoops[index] = 0;
+            getKeyInfo(key).heldTime = 0;
         }
         else if(isPressed)
         {
-            m_heldLoops[index]++;
+            getKeyInfo(key).heldTime++;
             
             /* Cap out at the threshold */
-            if(m_heldLoops[index] > m_holdThreshold)
-                m_heldLoops[index] = m_holdThreshold;
+            if(getKeyInfo(key).heldTime > m_holdThreshold)
+                getKeyInfo(key).heldTime = m_holdThreshold;
             
             
         }
     }
     
     m_mousePos = sf::Mouse::getPosition(m_window);
+}
+
+const Input::KeyInfo& Input::getKeyInfo(Key a) const
+{
+    return m_keyInfo[static_cast<int>(a)];
+}
+
+Input::KeyInfo& Input::getKeyInfo(Key a)
+{
+    return m_keyInfo[static_cast<int>(a)];
 }

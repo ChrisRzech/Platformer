@@ -60,11 +60,20 @@ public:
     void poll();
     
 private:
+    struct KeyInfo
+    {
+        bool isPressed;
+        bool wasReleased;
+        int heldTime;
+    };
+    
+    /* Helpers */
+    const KeyInfo& getKeyInfo(Key) const;
+    KeyInfo& getKeyInfo(Key);
+    
     const sf::Window& m_window;
     std::vector<Key> m_keysToPoll;
-    std::vector<bool> m_pressed;
-    std::vector<bool> m_released;
-    std::vector<int> m_heldLoops;
+    std::vector<KeyInfo> m_keyInfo;
     int m_holdThreshold;
     sf::Vector2i m_mousePos;
 };
