@@ -85,8 +85,6 @@ void Input::poll()
             /* Cap out at the threshold */
             if(getKeyInfo(key).heldTime > m_holdThreshold)
                 getKeyInfo(key).heldTime = m_holdThreshold;
-            
-            
         }
     }
     
