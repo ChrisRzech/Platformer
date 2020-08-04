@@ -47,12 +47,14 @@ public:
     
     void setKeysToPoll(const std::vector<Key>&);
     void poll();
-    bool keyIsPressed(Key) const;
+    bool isPressed(Key) const;
+    bool wasReleased(Key) const;
     sf::Vector2i mousePosition() const;
     
 private:
     const sf::Window& m_window;
     std::vector<Key> m_keysToPoll;
     std::vector<bool> m_pressed;
+    std::vector<bool> m_released;
     sf::Vector2i m_mousePos;
 };

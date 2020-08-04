@@ -96,22 +96,22 @@ int main()
         /* Game logic */
         sf::Vector2f dir(0, 0);
         
-        if(input.keyIsPressed(Input::Key::W))
+        if(input.isPressed(Input::Key::W))
             dir.y += -1;
-        if(input.keyIsPressed(Input::Key::S))
+        if(input.isPressed(Input::Key::S))
             dir.y += 1;
-        if(input.keyIsPressed(Input::Key::A))
+        if(input.isPressed(Input::Key::A))
             dir.x += -1;
-        if(input.keyIsPressed(Input::Key::D))
+        if(input.isPressed(Input::Key::D))
             dir.x += 1;
-        if(input.keyIsPressed(Input::Key::Q))
+        if(input.isPressed(Input::Key::Q))
             entity.setHitboxSize(entity.getHitboxSize() * 1.01f);
-        if(input.keyIsPressed(Input::Key::E))
+        if(input.isPressed(Input::Key::E))
             entity.setHitboxSize(entity.getHitboxSize() * 0.99f);
-        if(input.keyIsPressed(Input::Key::Space))
+        if(input.wasReleased(Input::Key::Space))
             entity.debug = !entity.debug;
         
-        if(input.keyIsPressed(Input::Key::LeftClick))
+        if(input.isPressed(Input::Key::LeftClick))
             std::cout << input.mousePosition().x << ", " << input.mousePosition().y << std::endl;
         
         entity.move(dir, 5);
